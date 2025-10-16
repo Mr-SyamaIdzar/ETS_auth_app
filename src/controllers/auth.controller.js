@@ -17,13 +17,17 @@ const getUsername = (email) => {
 export const CRegister = async (req, res) => {
   const { email, password, fullName } = req.body;
 
-  if (!email || !password || !fullName)
-    return res.status(400).json({ message: "Email, password, nama lengkap wajib diisi" });
+  if (!email || !password || !fullName) {
+    return res
+      .status(400)
+      .json({ message: "Email, password, nama lengkap wajib diisi" });
+  }
 
   const existingUser = await prisma.user.findUnique({ where: { email } });
 
-  if (existingUser)
+  if (existingUser) {
     return res.status(400).json({ message: "Email sudah terdaftar" });
+  }
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const username = getUsername(email);
